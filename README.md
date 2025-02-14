@@ -1,1 +1,29 @@
 # MiHySensorbox
+
+The sensor box for the Mi-Hy prototype. It currently uses the [Wi-Fi Aquaponics Kit](https://atlas-scientific.com/product/wi-fi-aquaponics-kit/) from Atlas Scientific.
+
+## SensorboxToMqtt
+
+Code to send the sensor data over MQTT. It currently uses [HiveMQ](https://www.hivemq.com) as a message broker. Because it currently uses an encrypted and authenticated connection you will have to set up an (free) account and (free) server at HiveMQ.
+
+### Installation
+
+To do...
+
+
+## MqttToConsole
+
+This python script listens for the updates from the sensor box (SensorboxToMqtt) and prints out the sensor values to the console.
+
+## MqttToSacred
+
+This python script listens for the updates from the sensor box (SensorboxToMqtt) and stores the values in a database using [Sacred](https://sacred.readthedocs.io/en/stable/index.html).
+
+### Installation
+
+To do...
+
+
+
+
+

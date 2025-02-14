@@ -4,7 +4,7 @@ The sensor box for the Mi-Hy prototype. It currently uses the [Wi-Fi Aquaponics 
 
 ## SensorboxToMqtt
 
-This directory contains the Arduino code for the Aquaponics Kit to collect the sensor data and broadcast the values over MQTT. It currently uses [HiveMQ](https://www.hivemq.com) as a message broker. Because it currently uses an encrypted and authenticated connection you will have to set up an (free) account and (free) server at HiveMQ.
+This directory contains the Arduino code for the Aquaponics Kit to collect the sensor data and broadcast the values over [MQTT](https://en.wikipedia.org/wiki/MQTT). It currently uses [HiveMQ](https://www.hivemq.com) as a message broker. Because it currently uses an encrypted and authenticated connection you will have to set up an (free) account and (free) server at HiveMQ.
 
 ### Installation
 

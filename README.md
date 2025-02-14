@@ -13,11 +13,11 @@ To do...
 
 ## MqttToConsole
 
-This python script listens for the updates from the sensor box (SensorboxToMqtt) and prints out the sensor values to the console.
+This python script listens to the MQTT broker for the updates from the sensor box (sent via SensorboxToMqtt) and prints out the sensor values to the console.
 
 ## MqttToSacred
 
-This python script listens for the updates from the sensor box (SensorboxToMqtt) and stores the values in a database using [Sacred](https://sacred.readthedocs.io/en/stable/index.html).
+This python script listens to the MQTT broker for the updates from the sensor box (sent via SensorboxToMqtt)and stores the values in a database using [Sacred](https://sacred.readthedocs.io/en/stable/index.html).
 
 ### Installation
 

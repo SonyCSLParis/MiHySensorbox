@@ -1,0 +1,7 @@
+*~
+my-credentials.sh
+SensorboxToMqtt/mqtt-credentials.h
+SensorboxToMqtt/wifi-credentials.h
+SensorboxToMqtt/system-id.h
+__pycache__
+my_runs

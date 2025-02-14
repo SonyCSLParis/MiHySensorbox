@@ -7,12 +7,8 @@
 #include "wifi-credentials.h"
 #include "mqtt-credentials.h"
 #include "root-certificate.h"
+#include "system-id.h"
 #include "AquaponicsKit.h"
-
-const char broker[] = "8ac29668f904485db8f7dfbea2ec2302.s1.eu.hivemq.cloud";
-int port = 8883;
-const char *mqtt_topic  = "mi-hy/update";
-const char *mihy_id = "system-001";
 
 Measurements measurements;
 AquaponicsKit sensor_box;
@@ -20,7 +16,6 @@ WiFiUDP ntp_udp;
 NTPClient ntp_client(ntp_udp);
 WiFiClientSecure tls;
 MqttClient mqtt(tls);
-
 
 // Function to check if wifi is connected.
 bool wifi_isconnected() 
@@ -76,7 +71,7 @@ void setup()
         
         tls.setCACert(root_ca);
 
-        if (!tls.connect(broker, port)) {
+        if (!tls.connect(mqtt_broker, mqtt_port)) {
                 Serial.println("Connection failed!");
 
         } else {
@@ -84,15 +79,15 @@ void setup()
                 Serial.println("TLS connection okay (?)");
                 
                 // Each client must have a unique client ID
-                mqtt.setId(mihy_id);
+                mqtt.setId(system_id);
 
                 // You can provide a username and password for authentication
                 mqtt.setUsernamePassword(mqtt_user, mqtt_password);
 
-                Serial.print("Attempting to connect to the MQTT broker: ");
-                Serial.println(broker);
+                Serial.print("Attempting to connect to the MQTT mqtt_broker: ");
+                Serial.println(mqtt_broker);
 
-                if (!mqtt.connect(broker, port)) {
+                if (!mqtt.connect(mqtt_broker, mqtt_port)) {
                         Serial.print("MQTT connection failed! Error code = ");
                         Serial.println(mqtt.connectError());
 
@@ -135,7 +130,7 @@ void make_measurements_string(std::string& s)
         std::stringstream ss;
 
         ss << "{";
-        ss << "\"id\":\"" << mihy_id << "\",";
+        ss << "\"id\":\"" << system_id << "\",";
         ss << "\"time\":" << ntp_client.getEpochTime();
         if (measurements.has_temperature()) {
                 ss << ",\"t\":" << measurements.get_temperature();

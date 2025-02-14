@@ -11,12 +11,15 @@ This directory contains the Arduino code for the Aquaponics Kit to collect the s
 To do...
 
 
-Make sure your Aquaponics Kit works. Please follow the [documentation](https://files.atlas-scientific.com/Wi-Fi-Aquaponics-kit-datasheet.pdf) provided by Altas Scientific to make sure your kit works fine and all the sensors are callibrated.
-
-The documentation will guide you also through the installation of some of the required Arduino libraries and how to upload the Arduino code.
+Make sure your Aquaponics Kit works. Please follow the [documentation](https://files.atlas-scientific.com/Wi-Fi-Aquaponics-kit-datasheet.pdf) provided by Altas Scientific to make sure your kit works fine and all the sensors are callibrated. This documentation will guide you also through the installation of some of the required Arduino libraries and how to upload the Arduino code.
 
 
-* Install ArduinoMqttLibrary
+Install ArduinoMqttLibrary
+
+Copy and edit the following files (remove the '-EDIT' postfix):
+* mqtt-credentials-EDIT.h
+* wifi-credentials-EDIT.h
+* system-id-EDIT.h
 
 
 ## MqttToConsole
@@ -26,6 +29,17 @@ This python script listens to the MQTT broker for the updates from the sensor bo
 ### Installation
 
 ```pip3 install paho-mqtt```
+
+On Linux and Mac, copy my-credentials-EDIT.sh to my-credentials.sh. Then open the new file with a plain text editor and set the correct values for the connection parameters. The Atlas credentials are not needed for this script. 
+
+### Usage
+
+On Linux and Mac
+
+In a terminal window, change to the MqttToConsole directory and then execute the followig command:
+
+```bash mqtt_to_console.sh```
+
 
 
 ## MqttToSacred
@@ -41,6 +55,17 @@ To do...
 Install Sacred: see [https://pypi.org/project/sacred/](https://pypi.org/project/sacred/)
 
 Install MongoDB?
+
+On Linux and Mac, copy my-credentials-EDIT.sh to my-credentials.sh. Then open the new file with a plain text editor and set the correct values for the connection parameters. The Atlas credentials are not needed for this script. 
+
+
+### Usage
+
+On Linux and Mac
+
+In a terminal window, change to the MqttToConsole directory and then execute the followig command:
+
+```bash mqtt_to_sacred.sh <system-id>```
 
 
 

@@ -14,15 +14,25 @@ mqtt_topic = os.getenv('MQTT_TOPIC')
 mqtt_username = os.getenv('MQTT_USERNAME')
 mqtt_password = os.getenv('MQTT_PASSWORD')
 
-#mongo_user = os.getenv('ATLAS_USER')
-#mongo_password = os.getenv('ATLAS_PASSWORD')
-#mongo_url = os.getenv('ATLAS_URL')
-#mongo_uri = f"mongodb+srv://{mongo_user}:{mongo_password}@{mongo_url}"
-#ex.observers.append(MongoObserver(mongo_uri, 'mihy_test_db'))
-
 ex = Experiment()
-ex.observers.append(FileStorageObserver('my_runs'))
 
+sacred_backend = "mongodb"
+#sacred_backend = "file"
+
+if sacred_backend == "mongodb":
+    mongo_user = os.getenv('ATLAS_USER')
+    mongo_password = os.getenv('ATLAS_PASSWORD')
+    mongo_url = os.getenv('ATLAS_URL')
+    mongo_uri = f"mongodb+srv://{mongo_user}:{mongo_password}@{mongo_url}"
+    ex.observers.append(MongoObserver(mongo_uri, 'mihy_data'))
+    print(f"Created Mongo Observer at mongodb+srv://{mongo_user}@{mongo_url}")
+elif sacred_backend == "file":
+    ex.observers.append(FileStorageObserver('mihy_data'))
+else:
+    raise ValueError(f'Unknown Sacred database back-end: {sacred_backend}. '
+                     + f'Known options "mongodb" or "file"')
+    
+    
 def get_date_index():
     now = datetime.now()
     # Record until the end of the day
@@ -47,6 +57,7 @@ def on_message(client, userdata, msg):
         data = json.loads(s)
         if data['id'] == selected_system:
             store_data(data)
+            print(f"Stored data. Time {data['time']}")
     except ValueError as e:
         print(f"Failed to parse: {s}")
         print(f"Error: {e}")
@@ -68,7 +79,21 @@ def store_metric(data, shortname, longname):
     else:
         ex.log_scalar(longname, -sys.float_info.max)
 
-        
+
+def create_mongo_backend():
+    global ex
+    mongo_user = os.getenv('ATLAS_USER')
+    mongo_password = os.getenv('ATLAS_PASSWORD')
+    mongo_url = os.getenv('ATLAS_URL')
+    mongo_uri = f"mongodb+srv://{mongo_user}:{mongo_password}@{mongo_url}"
+    ex.observers.append(MongoObserver(mongo_uri, 'mihy_data'))
+    print(f"Created Mongo Observer at mongodb+srv://{mongo_user}@{mongo_url}")
+
+
+def create_file_backend():
+    global ex
+    ex.observers.append(FileStorageObserver('mihy_data'))
+    
 @ex.automain
 def mqtt_experiment_main(_run, _config):
     date_index = get_date_index()
@@ -77,7 +102,7 @@ def mqtt_experiment_main(_run, _config):
         'system-id': selected_system
     }
 
-    print(f"Recording for date index {date_index} for system {selected_system}")
+    print(f"Recording for date index {date_index} for system {selected_system}.")
     
     client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2,
                          userdata=userdata)

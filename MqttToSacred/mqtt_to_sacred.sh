@@ -6,8 +6,9 @@ then
     echo "Example: store.sh system-001"
     exit 1
 fi
+SYSTEMID=$1
 
 source ../my-credentials.sh
-python3 mqtt_to_sacred.py $1
+python3 mqtt_to_sacred.py $SYSTEMID
 
 

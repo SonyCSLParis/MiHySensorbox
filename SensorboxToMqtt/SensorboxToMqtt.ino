@@ -50,6 +50,33 @@ void connect_wifi()
         Serial.println("You're connected to the network");
 }
 
+void connect_mqtt()
+{
+        mqtt.setId(system_id);
+        mqtt.setUsernamePassword(mqtt_user, mqtt_password);
+        Serial.print("Attempting to connect to the MQTT broker: ");
+        Serial.println(mqtt_broker);
+        
+        if (!mqtt.connect(mqtt_broker, mqtt_port)) {
+                Serial.print("MQTT connection failed! Error code = ");
+                Serial.println(mqtt.connectError());
+                Serial.print("failed, rc=");
+                Serial.println(" try again in 5 seconds");
+                delay(2000);
+        } else {
+                Serial.println("Connected to the MQTT broker!");
+                Serial.println();
+                Serial.println("connected so subscribe");
+        }
+}
+
+void reconnect_mqtt()
+{
+        while (mqtt.connected() == 0) {
+                connect_mqtt();
+        }
+}
+
 void setup() 
 {
         // Initialize serial and wait for port to open
@@ -78,24 +105,7 @@ void setup()
 
                 Serial.println("TLS connection okay (?)");
                 
-                // Each client must have a unique client ID
-                mqtt.setId(system_id);
-
-                // You can provide a username and password for authentication
-                mqtt.setUsernamePassword(mqtt_user, mqtt_password);
-
-                Serial.print("Attempting to connect to the MQTT mqtt_broker: ");
-                Serial.println(mqtt_broker);
-
-                if (!mqtt.connect(mqtt_broker, mqtt_port)) {
-                        Serial.print("MQTT connection failed! Error code = ");
-                        Serial.println(mqtt.connectError());
-
-                        while (1);
-                }
-
-                Serial.println("You're connected to the MQTT broker!");
-                Serial.println();
+                connect_mqtt();
 
                 ntp_client.begin();
         }
@@ -157,6 +167,7 @@ void make_measurements_string(std::string& s)
 void send_mqtt_message(std::string& s)
 {
         // send message, the Print interface can be used to set the message contents
+        reconnect_mqtt();
         mqtt.beginMessage(mqtt_topic);
         mqtt.print(s.c_str());
         mqtt.endMessage();

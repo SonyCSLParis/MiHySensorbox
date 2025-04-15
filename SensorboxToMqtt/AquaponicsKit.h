@@ -30,8 +30,8 @@ protected:
 
         // How long to wait between polls
         //static const unsigned int poll_delay_ = 5 * 60 * 1000; // five minutes   
-        static const unsigned long poll_delay_ = 1 * 60 * 1000; // one minute   
-        //static const unsigned int poll_delay_ = 2 * 1000; // two seconds   
+        //static const unsigned long poll_delay_ = 1 * 60 * 1000; // one minute   
+        static const unsigned int poll_delay_ = 2 * 1000; // two seconds   
         
         // How long to wait between polls after accounting for the
         // times it takes to send readings

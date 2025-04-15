@@ -40,9 +40,14 @@ void connect_wifi()
         Serial.println(ssid);
 
         WiFi.begin(ssid, password);
+        int count = 0;
         while (!wifi_isconnected()) {
                 // failed, retry
                 Serial.print(".");
+                if (++count == 72) {
+                  Serial.println();
+                  count = 0;
+                }
                 delay(500);
         }
 
@@ -159,6 +164,15 @@ void make_measurements_string(std::string& s)
         }
         if (measurements.has_co2()) {
                 ss << ",\"co2\":" << measurements.get_co2();
+        }
+        if (measurements.has_voltage0()) {
+                ss << ",\"v0\":" << measurements.get_voltage0();
+        }
+        if (measurements.has_voltage1()) {
+                ss << ",\"v1\":" << measurements.get_voltage1();
+        }
+        if (measurements.has_voltage2()) {
+                ss << ",\"v2\":" << measurements.get_voltage2();
         }
         ss << "}";
         s = ss.str();

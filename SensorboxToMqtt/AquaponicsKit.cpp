@@ -40,6 +40,11 @@ void AquaponicsKit::setup()
         digitalWrite(EN_EC, LOW);
         digitalWrite(EN_HUM, HIGH);
         digitalWrite(EN_CO2, HIGH);
+
+        pinMode(A2, INPUT);
+        pinMode(A3, INPUT);
+        pinMode(A4, INPUT);
+        analogReadResolution(12);
 }
 
 void AquaponicsKit::update(Measurements& measurements)
@@ -146,5 +151,9 @@ void AquaponicsKit::step4(Measurements& measurements)
         if (CO2.get_error() == Ezo_board::SUCCESS) { 
                 measurements.set_co2(CO2.get_last_received_reading());
         }
+        
+        measurements.set_voltage0(3.3f * (float) analogRead(A2) / 4096.0f);
+        measurements.set_voltage1(3.3f * (float) analogRead(A3) / 4096.0f);
+        measurements.set_voltage2(3.3f * (float) analogRead(A4) / 4096.0f);
 }
 
